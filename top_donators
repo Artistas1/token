@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gauti Access Token iš Streamlabs</title>
+</head>
+<body>
+  <h1>Gauti Access Token iš Streamlabs</h1>
+  <div id="status">Tikrinama...</div>
+  <script>
+    const clientId = "9eff3fea-2ce8-4577-87d5-72523f84a0fc"; // tavo Client ID
+    const clientSecret = "tYk3mG2c3uTivXuKV2aGNorkW06EqfyCONnljh5o"; // pakeisk savo secret (tik testavimui)
+    const redirectUri = "https://artistas1.github.io/token/top_donators.html"; // tavo GitHub Pages URL
+
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const statusEl = document.getElementById("status");
+
+    if (!code) {
+      statusEl.innerText = "Nerastas joks kodas URL'e.";
+    } else {
+      statusEl.innerText = "Gautas kodas: " + code;
+
+      // Iškviečiam Streamlabs token endpoint'ą
+      fetch("https://streamlabs.com/api/v1.0/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "authorization_code",
+          client_id: clientId,
+          client_secret: clientSecret,
+          redirect_uri: redirectUri,
+          code: code,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.access_token) {
+            statusEl.innerText = "Gautas Access Token: " + data.access_token;
+          } else {
+            statusEl.innerText = "Klaida gaunant token: " + JSON.stringify(data);
+          }
+        })
+        .catch((err) => {
+          statusEl.innerText = "Klaida: " + err;
+        });
+    }
+  </script>
+</body>
+</html>
