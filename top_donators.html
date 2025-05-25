@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Gauti Access Token</title>
+</head>
+<body>
+  <h2>Gauti Access Token iš Streamlabs</h2>
+  <pre id="output">Tikrinama...</pre>
+
+  <script>
+    const clientId = "9eff3fea-2ce8-4577-87d5-72523f84a0fc";
+    const clientSecret = "tYk3mG2c3uTivXuKV2aGNorkW06EqfyCONnljh5o";
+    const redirectUri = "https://www.google.com/?code=def50200ef3a8192f71a1cbd45ed0f325f69c999249c6a6586d05ca9e0ee59a948c725a96b56f74f8f6325c91c4509fb4dfd9a646d5e7aa4e247858589053c2e9d8b17bb032a15c4182217fbbe250f208e345eea00194c4b1d142d275a7c9bc1cd7d3d83fad6c57dc5a705e4aa3f5dc45932293fad9dca93a737be06d4cd1b84d69d1afad811fbc0289e089c0718043482d0a0cfbf6e38332514e428b3a3170945e018d5423e5814cfda365ec1ac58990709565a36b9575c7824db97c9ee5d7e82a29800e8f0dfd03d6b9eaa962407972b8e4bbcb903f1dece5a56719f300974d4c18fc7f4dca2b7b5da59c3bc7480120c4d68e248db274e91e7c9297ea0eb4c564e7562e32f7cc1e9133df23948d1b8d21476bdd539250185bb01915cd2152e1d062cc6c1459ac1c74234b0dd8c7e4d67a1502bf28da3b846046ea4e94435918ee1fec979263bc1b7c17edba59f2cabade5be136b30b05de369cc750d5f439197ba3fcbe580106fcde5d1002b73bc9bf8974a9b378831db89f2744bfd0652829b71b81a0a04f7264a22537f96f6f13c3bd4aa710b200abe6a9da8e8e918&state=123456";
+
+    async function getToken(code) {
+      const body = new URLSearchParams({
+        grant_type: "authorization_code",
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gauti Access Token iš Streamlabs</title>
+</head>
+<body>
+  <h1>Gauti Access Token iš Streamlabs</h1>
+  <div id="status">Tikrinama...</div>
+  <script>
+    const clientId = "9eff3fea-2ce8-4577-87d5-72523f84a0fc"; // tavo Client ID
+    const clientSecret = "tYk3mG2c3uTivXuKV2aGNorkW06EqfyCONnljh5o"; // pakeisk savo secret (tik testavimui)
+    const redirectUri = "https://artistas1.github.io/token/top_donators.html"; // tavo GitHub Pages URL
+
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const statusEl = document.getElementById("status");
+
+    if (!code) {
+      statusEl.innerText = "Nerastas joks kodas URL'e.";
+    } else {
+      statusEl.innerText = "Gautas kodas: " + code;
+
+      // Iškviečiam Streamlabs token endpoint'ą
+      fetch("https://streamlabs.com/api/v1.0/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "authorization_code",
+          client_id: clientId,
+          client_secret: clientSecret,
+          redirect_uri: redirectUri,
+          code: code,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.access_token) {
+            statusEl.innerText = "Gautas Access Token: " + data.access_token;
+          } else {
+            statusEl.innerText = "Klaida gaunant token: " + JSON.stringify(data);
+          }
+        })
+        .catch((err) => {
+          statusEl.innerText = "Klaida: " + err;
+        });
+    }
+  </script>
+</body>
+</html>
+
+        code: code
+      });
+
+      try {
+        const response = await fetch("https://streamlabs.com/api/v1.0/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: body.toString()
+        });
+
+        const data = await response.json();
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById("output").textContent = "Klaida: " + err;
+      }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+
+    if (code) {
+      getToken(code);
+    } else {
+      document.getElementById("output").textContent = "Nerastas joks kodas URL'e.";
+    }
+  </script>
+</body>
+</html>
